@@ -14,6 +14,16 @@ from yaml.loader import SafeLoader
 stream = open ("config.yaml", 'r')
 dictionary = yaml.load(stream, Loader=SafeLoader)
 
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+args = vars(ap.parse_args())
+vs = VideoStream(src=0).start()
+time.sleep(1.0)
+firstFrame = None
+i = 0
+
+
+
 class YAML:
     def __init__(self, threshold_1, refrash_frame, img_directory, x_start, x_end, y_start, y_end, red, green, blue):
 
@@ -81,16 +91,6 @@ def image_cap(full_frame):
     # filename = 'C:/Users/user/OneDrive/Desktop/test/{0}.jpg'.format(date)
     filename = f'{img_directory}/{date}.jpg'
     cv2.imwrite(filename, full_frame)
-
-
-# construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-args = vars(ap.parse_args())
-vs = VideoStream(src=0).start()
-time.sleep(1.0)
-firstFrame = None
-i = 0
-
 
 
 if __name__ == '__main__':
