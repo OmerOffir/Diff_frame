@@ -10,7 +10,8 @@ from time import sleep
 import cv2
 import yaml
 from yaml.loader import SafeLoader
-############################# Read the YAML file ################################################
+
+####################################### Configuration ##############################################
 stream = open ("config.yaml", 'r')
 dictionary = yaml.load(stream, Loader=SafeLoader)
 
@@ -23,7 +24,7 @@ firstFrame = None
 i = 0
 
 
-
+############################# Read the YAML file ################################################
 class YAML:
     def __init__(self, threshold_1, refrash_frame, img_directory, x_start, x_end, y_start, y_end, red, green, blue):
 
