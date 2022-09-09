@@ -40,6 +40,15 @@ Y = params['Y']
 y_start = Y ['y_start']
 y_end = Y ['y_end']
 
+color = dictionary['color']
+# print(type(color))
+color = dict(color)
+
+red = color['red']
+green = color['green']
+blue = color['blue']
+
+
 # print(type(y_start))
 
 
@@ -85,13 +94,11 @@ if __name__ == '__main__':
             firstFrame = gray
             continue
 
-        # show the trigger zone in red rectangle
-        # cv2.rectangle(frame, (205, 160), (270, 190), (0, 0, 255), 2)   
-        cv2.rectangle(frame, (x_start, y_start), (x_end, y_end), (0, 0, 255), 2)            
+        # show the trigger zone in red rectangle 
+        cv2.rectangle(frame, (x_start, y_start), (x_end, y_end), (blue, green, red), 2)            
         # cv2.rectangle(frame, (X, Y), (Xend, Yend), (BLUE, GREEN, RED), 2)
 
         # small RED frame
-        # frameDelta_RED = cv2.absdiff(firstFrame[160:190, 205:270], gray[160:190, 205:270])
         frameDelta_RED = cv2.absdiff(firstFrame[y_start:y_end, x_start:x_end], gray[y_start:y_end, x_start:x_end])
         thresh_RED = cv2.threshold(frameDelta_RED, 25, 255, cv2.THRESH_BINARY)[1]
 
