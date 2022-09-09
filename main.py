@@ -17,7 +17,7 @@ dictionary = yaml.load(stream, Loader=SafeLoader)
  
 def threshold_num():
     threshold_1 = dictionary['threshold']
-    print (type(threshold_1))
+    # print (type(threshold_1))
     threshold_1 = int(threshold_1)
     return threshold_1
 
@@ -117,8 +117,9 @@ if __name__ == '__main__':
         # Sens of the motion ditection
         thresh_sum_RED = np.sum(thresh_RED)
 
+
         try:
-            threshold_1 = threshold_num
+            threshold_1 = threshold_num()
             # Define threshold
             if thresh_sum_RED > threshold_1:
                 text = "Detected"
@@ -126,7 +127,7 @@ if __name__ == '__main__':
 
 
             i += 1
-            refrash_frame = refrash_fn
+            refrash_frame = refrash_fn()
             if (i > refrash_frame):                                      # The number of frames from a sample.
                 firstFrame = gray
                 i = 0
