@@ -14,55 +14,68 @@ from yaml.loader import SafeLoader
 stream = open ("config.yaml", 'r')
 dictionary = yaml.load(stream, Loader=SafeLoader)
 
+class YAML:
+    def __init__(self, threshold_1, refrash_frame, img_directory, x_start, x_end, y_start, y_end, red, green, blue):
 
-def threshold_num():
-    threshold_1 = dictionary['threshold']
-    # print (type(threshold_1))
-    threshold_1 = int(threshold_1)
-    return threshold_1
+        self.threshold_1 = threshold_1
+        self.refrash_frame = refrash_frame
+        self. img_directory = img_directory
+        self.x_start = x_start
+        self.x_end = x_end
+        self.y_start = y_start
+        self.y_end = y_end
+        self.red = red
+        self.green = green
+        self.blue = blue
 
-def refrash_fn():
-    refrash_frame = dictionary['refrash_frame']
-    # print (type(refrash_frame))
-    refrash_frame = int(refrash_frame)
-    return refrash_frame
+    def threshold_num():
+        threshold_1 = dictionary['threshold']
+        # print (type(threshold_1))
+        threshold_1 = int(threshold_1)
+        return threshold_1
 
-def img_direc():
-    img_directory = dictionary['img_directory']
-    # print (type(img_directory))
-    img_directory = str(img_directory)
-    return img_directory
+    def refrash_fn():
+        refrash_frame = dictionary['refrash_frame']
+        # print (type(refrash_frame))
+        refrash_frame = int(refrash_frame)
+        return refrash_frame
 
-def frame_params():
-    params = dictionary['red_frame']
-    # print(params) 
-    params = dict(params)
+    def img_direc():
+        img_directory = dictionary['img_directory']
+        # print (type(img_directory))
+        img_directory = str(img_directory)
+        return img_directory
 
-    X = params['X']
-    x_start = X ['x_start']
-    x_end = X ['x_end']
+    def frame_params():
+        params = dictionary['red_frame']
+        # print(params) 
+        params = dict(params)
 
-    Y = params['Y']
-    y_start = Y ['y_start']
-    y_end = Y ['y_end']
+        X = params['X']
+        x_start = X ['x_start']
+        x_end = X ['x_end']
 
-    return x_start, x_end, y_start, y_end
+        Y = params['Y']
+        y_start = Y ['y_start']
+        y_end = Y ['y_end']
 
-def colors():
-    color = dictionary['color']
-    # print(type(color))
-    color = dict(color)
+        return x_start, x_end, y_start, y_end
 
-    red = color['red']
-    green = color['green']
-    blue = color['blue']
-    return red, green, blue
+    def colors():
+        color = dictionary['color']
+        # print(type(color))
+        color = dict(color)
+
+        red = color['red']
+        green = color['green']
+        blue = color['blue']
+        return red, green, blue
 
 ###########################################################################################
 
 
 def image_cap(full_frame):
-    img_directory = img_direc()
+    img_directory = YAML.img_direc()
     date = time.strftime("%Y-%b-%d_(%H%M%S)")
     # full_frame = imutils.resize(full_frame, width=2048)
     # filename = 'C:/Users/user/OneDrive/Desktop/test/{0}.jpg'.format(date)
@@ -86,8 +99,8 @@ if __name__ == '__main__':
     while True:
         # grab the current frame and initialize the occupied/unoccupied
         # text
-        x_start, x_end, y_start, y_end = frame_params()
-        red, green, blue = colors()
+        x_start, x_end, y_start, y_end = YAML.frame_params()
+        red, green, blue = YAML.colors()
         frame = vs.read()
         full_frame = frame
         frame = frame if args.get("video", None) is None else frame[1]
@@ -119,7 +132,7 @@ if __name__ == '__main__':
 
 
         try:
-            threshold_1 = threshold_num()
+            threshold_1 = YAML.threshold_num()
             # Define threshold
             if thresh_sum_RED > threshold_1:
                 text = "Detected"
@@ -127,7 +140,7 @@ if __name__ == '__main__':
 
 
             i += 1
-            refrash_frame = refrash_fn()
+            refrash_frame = YAML.refrash_fn()
             if (i > refrash_frame):                                      # The number of frames from a sample.
                 firstFrame = gray
                 i = 0
