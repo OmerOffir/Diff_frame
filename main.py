@@ -11,48 +11,58 @@ import cv2
 import yaml
 from yaml.loader import SafeLoader
 ############################# Read the YAML file ################################################
-
 stream = open ("config.yaml", 'r')
 dictionary = yaml.load(stream, Loader=SafeLoader)
 
-threshold_1 = dictionary['threshold']
-print (type(threshold_1))
-threshold_1 = int(threshold_1)
+ 
+def threshold_num():
+    threshold_1 = dictionary['threshold']
+    print (type(threshold_1))
+    threshold_1 = int(threshold_1)
+    return threshold_1
 
-refrash_frame = dictionary['refrash_frame']
-# print (type(refrash_frame))
-refrash_frame = int(refrash_frame)
+def refrash_fn():
+    refrash_frame = dictionary['refrash_frame']
+    # print (type(refrash_frame))
+    refrash_frame = int(refrash_frame)
+    return refrash_frame
 
-img_directory = dictionary['img_directory']
-# print (type(img_directory))
-img_directory = str(img_directory)
+def img_direc():
+    img_directory = dictionary['img_directory']
+    # print (type(img_directory))
+    img_directory = str(img_directory)
+    return img_directory
 
-params = dictionary['red_frame']
-# print(params) 
-params = dict(params)
+def frame_params():
+    params = dictionary['red_frame']
+    # print(params) 
+    params = dict(params)
 
-X = params['X']
-x_start = X ['x_start']
-x_end = X ['x_end']
+    X = params['X']
+    x_start = X ['x_start']
+    x_end = X ['x_end']
 
+    Y = params['Y']
+    y_start = Y ['y_start']
+    y_end = Y ['y_end']
 
-Y = params['Y']
-y_start = Y ['y_start']
-y_end = Y ['y_end']
+    return x_start, x_end, y_start, y_end
 
-color = dictionary['color']
-# print(type(color))
-color = dict(color)
+def colors():
+    color = dictionary['color']
+    # print(type(color))
+    color = dict(color)
 
-red = color['red']
-green = color['green']
-blue = color['blue']
+    red = color['red']
+    green = color['green']
+    blue = color['blue']
+    return red, green, blue
 
-
-# print(type(y_start))
+###########################################################################################
 
 
 def image_cap(full_frame):
+    img_directory = img_direc()
     date = time.strftime("%Y-%b-%d_(%H%M%S)")
     # full_frame = imutils.resize(full_frame, width=2048)
     # filename = 'C:/Users/user/OneDrive/Desktop/test/{0}.jpg'.format(date)
@@ -76,6 +86,8 @@ if __name__ == '__main__':
     while True:
         # grab the current frame and initialize the occupied/unoccupied
         # text
+        x_start, x_end, y_start, y_end = frame_params()
+        red, green, blue = colors()
         frame = vs.read()
         full_frame = frame
         frame = frame if args.get("video", None) is None else frame[1]
@@ -106,6 +118,7 @@ if __name__ == '__main__':
         thresh_sum_RED = np.sum(thresh_RED)
 
         try:
+            threshold_1 = threshold_num
             # Define threshold
             if thresh_sum_RED > threshold_1:
                 text = "Detected"
@@ -113,6 +126,7 @@ if __name__ == '__main__':
 
 
             i += 1
+            refrash_frame = refrash_fn
             if (i > refrash_frame):                                      # The number of frames from a sample.
                 firstFrame = gray
                 i = 0

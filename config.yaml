@@ -16,9 +16,9 @@ red_frame:
     y_end: 190
 
 color:
-  red: 0
+  red: 255
   green: 0
-  blue: 255
+  blue: 0
 
 
 ...
