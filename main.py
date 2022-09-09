@@ -14,7 +14,7 @@ from yaml.loader import SafeLoader
 stream = open ("config.yaml", 'r')
 dictionary = yaml.load(stream, Loader=SafeLoader)
 
- 
+
 def threshold_num():
     threshold_1 = dictionary['threshold']
     # print (type(threshold_1))
