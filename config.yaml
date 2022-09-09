@@ -1,0 +1,20 @@
+---
+
+img_directory: C:/Users/user/OneDrive/Desktop/test
+
+threshold: 150000       
+
+refrash_frame: 100
+
+red_frame:
+  X:
+    x_start: 205
+    x_end: 270
+
+  Y:
+    y_start: 160
+    y_end: 190
+
+
+
+...

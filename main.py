@@ -1,4 +1,5 @@
 # import the necessary packages
+from tkinter import Y
 from imutils.video import VideoStream
 import numpy as np
 import argparse
@@ -7,18 +8,51 @@ import imutils
 import time
 from time import sleep
 import cv2
+import yaml
+from yaml.loader import SafeLoader
+############################# Read the YAML file ################################################
+
+stream = open ("config.yaml", 'r')
+dictionary = yaml.load(stream, Loader=SafeLoader)
+
+threshold_1 = dictionary['threshold']
+print (type(threshold_1))
+threshold_1 = int(threshold_1)
+
+refrash_frame = dictionary['refrash_frame']
+# print (type(refrash_frame))
+refrash_frame = int(refrash_frame)
+
+img_directory = dictionary['img_directory']
+# print (type(img_directory))
+img_directory = str(img_directory)
+
+params = dictionary['red_frame']
+# print(params) 
+params = dict(params)
+
+X = params['X']
+x_start = X ['x_start']
+x_end = X ['x_end']
+
+
+Y = params['Y']
+y_start = Y ['y_start']
+y_end = Y ['y_end']
+
+# print(type(y_start))
 
 
 def image_cap(full_frame):
     date = time.strftime("%Y-%b-%d_(%H%M%S)")
     # full_frame = imutils.resize(full_frame, width=2048)
-    filename = 'C:/Users/user/OneDrive/Desktop/test/{0}.jpg'.format(date)
+    # filename = 'C:/Users/user/OneDrive/Desktop/test/{0}.jpg'.format(date)
+    filename = f'{img_directory}/{date}.jpg'
     cv2.imwrite(filename, full_frame)
 
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-# ap.add_argument("-a", "--min-area", type=int, default=3000, help="minimum area size")
 args = vars(ap.parse_args())
 vs = VideoStream(src=0).start()
 time.sleep(1.0)
@@ -52,28 +86,32 @@ if __name__ == '__main__':
             continue
 
         # show the trigger zone in red rectangle
-
-        cv2.rectangle(frame, (205, 160), (270, 190), (0, 0, 255), 2)
+        # cv2.rectangle(frame, (205, 160), (270, 190), (0, 0, 255), 2)   
+        cv2.rectangle(frame, (x_start, y_start), (x_end, y_end), (0, 0, 255), 2)            
         # cv2.rectangle(frame, (X, Y), (Xend, Yend), (BLUE, GREEN, RED), 2)
-        # small RED frame
 
-        frameDelta_RED = cv2.absdiff(firstFrame[160:190, 205:270], gray[160:190, 205:270])
+        # small RED frame
+        # frameDelta_RED = cv2.absdiff(firstFrame[160:190, 205:270], gray[160:190, 205:270])
+        frameDelta_RED = cv2.absdiff(firstFrame[y_start:y_end, x_start:x_end], gray[y_start:y_end, x_start:x_end])
         thresh_RED = cv2.threshold(frameDelta_RED, 25, 255, cv2.THRESH_BINARY)[1]
 
-        ############################ sens of the motion ditection
+        # Sens of the motion ditection
         thresh_sum_RED = np.sum(thresh_RED)
 
-        
-        if thresh_sum_RED > 150000:
-            text = "Detected"
-            image_cap(full_frame)
+        try:
+            # Define threshold
+            if thresh_sum_RED > threshold_1:
+                text = "Detected"
+                image_cap(full_frame)
 
 
-        i += 1
-        if (i > 100):
-            firstFrame = gray
-            i = 0
-            thresh_sum_RED = 0
+            i += 1
+            if (i > refrash_frame):                                      # The number of frames from a sample.
+                firstFrame = gray
+                i = 0
+                thresh_sum_RED = 0
+        except:
+            continue
 
 
         # draw the text and timestamp on the frame
